@@ -1,0 +1,569 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Windows XP - Portfolio</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Tahoma', sans-serif;
+            overflow: hidden;
+            background: #000;
+        }
+
+        /* Boot Screen */
+        #bootScreen {
+            width: 100vw;
+            height: 100vh;
+            background: #000;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            color: #fff;
+        }
+
+        .xp-logo {
+            font-size: 72px;
+            font-weight: bold;
+            margin-bottom: 100px;
+            background: linear-gradient(to right, #0066cc, #00cc66);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .loading-bar {
+            width: 300px;
+            height: 8px;
+            background: #333;
+            border-radius: 4px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .loading-progress {
+            height: 100%;
+            width: 0%;
+            background: linear-gradient(to right, #0066cc, #00cc66);
+            animation: load 3s ease-in-out forwards;
+        }
+
+        @keyframes load {
+            to { width: 100%; }
+        }
+
+        /* Login Screen */
+        #loginScreen {
+            display: none;
+            width: 100vw;
+            height: 100vh;
+            background: linear-gradient(to bottom, #5A7FBC, #3E5F9F);
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+        }
+
+        .login-box {
+            background: #fff;
+            border-radius: 8px;
+            padding: 40px;
+            box-shadow: 0 8px 24px rgba(0,0,0,0.3);
+            text-align: center;
+            min-width: 350px;
+        }
+
+        .user-icon {
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(135deg, #0066cc, #00cc66);
+            border-radius: 50%;
+            margin: 0 auto 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #fff;
+            font-size: 36px;
+        }
+
+        .login-box h2 {
+            color: #333;
+            margin-bottom: 30px;
+            font-size: 18px;
+        }
+
+        .login-btn {
+            background: linear-gradient(to bottom, #4CAF50, #45a049);
+            color: white;
+            border: none;
+            padding: 12px 40px;
+            font-size: 14px;
+            border-radius: 3px;
+            cursor: pointer;
+            font-weight: bold;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+        }
+
+        .login-btn:hover {
+            background: linear-gradient(to bottom, #45a049, #3d8b40);
+        }
+
+        /* Desktop */
+        #desktop {
+            display: none;
+            width: 100vw;
+            height: 100vh;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" width="800" height="600"><rect fill="%230066cc" width="800" height="600"/><circle cx="650" cy="450" r="180" fill="%2300cc66" opacity="0.3"/><circle cx="150" cy="150" r="120" fill="%2300cc66" opacity="0.2"/></svg>') center/cover;
+            background-color: #5A7FBC;
+            position: relative;
+        }
+
+        .desktop-icon {
+            position: absolute;
+            width: 80px;
+            text-align: center;
+            cursor: pointer;
+            user-select: none;
+        }
+
+        .icon-image {
+            width: 48px;
+            height: 48px;
+            margin: 0 auto 5px;
+            background: linear-gradient(135deg, #fff, #e0e0e0);
+            border-radius: 4px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 28px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+        }
+
+        .icon-label {
+            color: #fff;
+            font-size: 11px;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.8);
+            padding: 2px 4px;
+            word-wrap: break-word;
+        }
+
+        .desktop-icon:hover .icon-label {
+            background: rgba(0,102,204,0.5);
+        }
+
+        /* Window */
+        .window {
+            position: absolute;
+            background: #fff;
+            border-radius: 8px 8px 0 0;
+            box-shadow: 0 4px 16px rgba(0,0,0,0.3);
+            display: none;
+            min-width: 400px;
+            min-height: 300px;
+        }
+
+        .window-header {
+            background: linear-gradient(to bottom, #0997ff, #0053ee);
+            color: white;
+            padding: 4px 8px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            cursor: move;
+            border-radius: 8px 8px 0 0;
+            height: 30px;
+        }
+
+        .window-title {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 12px;
+            font-weight: bold;
+        }
+
+        .window-buttons {
+            display: flex;
+            gap: 2px;
+        }
+
+        .window-btn {
+            width: 21px;
+            height: 21px;
+            border: none;
+            cursor: pointer;
+            font-size: 12px;
+            font-weight: bold;
+            border-radius: 2px;
+        }
+
+        .minimize-btn {
+            background: linear-gradient(to bottom, #3399ff, #0066cc);
+            color: #000;
+        }
+
+        .maximize-btn {
+            background: linear-gradient(to bottom, #3399ff, #0066cc);
+            color: #000;
+        }
+
+        .close-btn {
+            background: linear-gradient(to bottom, #ff4444, #cc0000);
+            color: #fff;
+        }
+
+        .window-content {
+            padding: 20px;
+            overflow-y: auto;
+            max-height: calc(100vh - 150px);
+        }
+
+        /* Taskbar */
+        .taskbar {
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+            height: 40px;
+            background: linear-gradient(to bottom, #245edb, #1941a5);
+            display: flex;
+            align-items: center;
+            padding: 0 8px;
+            box-shadow: 0 -2px 4px rgba(0,0,0,0.2);
+        }
+
+        .start-btn {
+            background: linear-gradient(to bottom, #3fbb3f, #2d8e2d);
+            color: white;
+            border: 1px solid #1a5a1a;
+            padding: 4px 12px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: bold;
+            font-size: 12px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+        }
+
+        .start-btn:hover {
+            background: linear-gradient(to bottom, #4ccc4c, #349534);
+        }
+
+        .taskbar-time {
+            margin-left: auto;
+            color: white;
+            font-size: 12px;
+            background: rgba(0,0,0,0.2);
+            padding: 4px 12px;
+            border-radius: 2px;
+        }
+
+        /* Resume Styles */
+        .resume-section {
+            margin-bottom: 25px;
+        }
+
+        .resume-section h3 {
+            color: #0066cc;
+            border-bottom: 2px solid #0066cc;
+            padding-bottom: 5px;
+            margin-bottom: 15px;
+            font-size: 16px;
+        }
+
+        .resume-section h4 {
+            color: #333;
+            margin-bottom: 5px;
+            font-size: 14px;
+        }
+
+        .resume-section p, .resume-section ul {
+            color: #555;
+            line-height: 1.6;
+            font-size: 13px;
+        }
+
+        .resume-section ul {
+            margin-left: 20px;
+        }
+
+        .job-title {
+            font-weight: bold;
+            color: #0066cc;
+        }
+
+        .date-range {
+            color: #777;
+            font-style: italic;
+            font-size: 12px;
+        }
+
+        .hidden {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <!-- Boot Screen -->
+    <div id="bootScreen">
+        <div class="xp-logo">Windows XP</div>
+        <div class="loading-bar">
+            <div class="loading-progress"></div>
+        </div>
+    </div>
+
+    <!-- Login Screen -->
+    <div id="loginScreen">
+        <div class="login-box">
+            <div class="user-icon">👤</div>
+            <h2>Click to log on</h2>
+            <button class="login-btn" onclick="login()">User</button>
+        </div>
+    </div>
+
+    <!-- Desktop -->
+    <div id="desktop">
+        <div class="desktop-icon" style="left: 20px; top: 20px;" ondblclick="openResume()">
+            <div class="icon-image">📄</div>
+            <div class="icon-label">My Resume</div>
+        </div>
+
+        <div class="desktop-icon" style="left: 20px; top: 120px;" ondblclick="openAbout()">
+            <div class="icon-image">💼</div>
+            <div class="icon-label">About Me</div>
+        </div>
+
+        <div class="desktop-icon" style="left: 20px; top: 220px;" ondblclick="openContact()">
+            <div class="icon-image">✉️</div>
+            <div class="icon-label">Contact</div>
+        </div>
+
+        <!-- Windows -->
+        <div id="resumeWindow" class="window" style="left: 150px; top: 100px; width: 700px;">
+            <div class="window-header">
+                <div class="window-title">
+                    <span>📄</span>
+                    <span>My Resume</span>
+                </div>
+                <div class="window-buttons">
+                    <button class="window-btn minimize-btn" onclick="minimizeWindow('resumeWindow')">_</button>
+                    <button class="window-btn maximize-btn" onclick="maximizeWindow('resumeWindow')">□</button>
+                    <button class="window-btn close-btn" onclick="closeWindow('resumeWindow')">×</button>
+                </div>
+            </div>
+            <div class="window-content">
+                <div class="resume-section">
+                    <h2 style="text-align: center; color: #0066cc; margin-bottom: 10px;">John Doe</h2>
+                    <p style="text-align: center; color: #555; margin-bottom: 20px;">
+                        Full Stack Developer | UI/UX Enthusiast
+                    </p>
+                </div>
+
+                <div class="resume-section">
+                    <h3>Professional Summary</h3>
+                    <p>Innovative full-stack developer with 5+ years of experience building responsive web applications. Passionate about creating intuitive user experiences and writing clean, maintainable code.</p>
+                </div>
+
+                <div class="resume-section">
+                    <h3>Experience</h3>
+                    <h4 class="job-title">Senior Full Stack Developer</h4>
+                    <p class="date-range">Tech Company Inc. | 2021 - Present</p>
+                    <ul>
+                        <li>Led development of customer-facing applications serving 100K+ users</li>
+                        <li>Implemented CI/CD pipelines reducing deployment time by 60%</li>
+                        <li>Mentored junior developers and conducted code reviews</li>
+                    </ul>
+                </div>
+
+                <div class="resume-section">
+                    <h4 class="job-title">Full Stack Developer</h4>
+                    <p class="date-range">Startup Co. | 2019 - 2021</p>
+                    <ul>
+                        <li>Built RESTful APIs using Node.js and Express</li>
+                        <li>Developed responsive UIs with React and modern CSS</li>
+                        <li>Collaborated with cross-functional teams in Agile environment</li>
+                    </ul>
+                </div>
+
+                <div class="resume-section">
+                    <h3>Education</h3>
+                    <h4>Bachelor of Science in Computer Science</h4>
+                    <p class="date-range">State University | 2015 - 2019</p>
+                </div>
+
+                <div class="resume-section">
+                    <h3>Skills</h3>
+                    <ul>
+                        <li><strong>Languages:</strong> JavaScript, TypeScript, Python, HTML/CSS</li>
+                        <li><strong>Frameworks:</strong> React, Node.js, Express, Next.js</li>
+                        <li><strong>Tools:</strong> Git, Docker, AWS, MongoDB, PostgreSQL</li>
+                        <li><strong>Soft Skills:</strong> Team Leadership, Agile Development, Problem Solving</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div id="aboutWindow" class="window" style="left: 200px; top: 150px; width: 500px;">
+            <div class="window-header">
+                <div class="window-title">
+                    <span>💼</span>
+                    <span>About Me</span>
+                </div>
+                <div class="window-buttons">
+                    <button class="window-btn minimize-btn" onclick="minimizeWindow('aboutWindow')">_</button>
+                    <button class="window-btn maximize-btn" onclick="maximizeWindow('aboutWindow')">□</button>
+                    <button class="window-btn close-btn" onclick="closeWindow('aboutWindow')">×</button>
+                </div>
+            </div>
+            <div class="window-content">
+                <h3 style="color: #0066cc; margin-bottom: 15px;">Hi, I'm John! 👋</h3>
+                <p style="line-height: 1.8; color: #555;">
+                    I'm a passionate developer who loves building things for the web. When I'm not coding, 
+                    you can find me exploring new technologies, contributing to open source, or enjoying the outdoors.
+                </p>
+                <p style="line-height: 1.8; color: #555; margin-top: 15px;">
+                    I believe in writing clean, maintainable code and creating experiences that users love. 
+                    This Windows XP-themed portfolio is a tribute to the OS that sparked my interest in computers!
+                </p>
+            </div>
+        </div>
+
+        <div id="contactWindow" class="window" style="left: 250px; top: 200px; width: 450px;">
+            <div class="window-header">
+                <div class="window-title">
+                    <span>✉️</span>
+                    <span>Contact</span>
+                </div>
+                <div class="window-buttons">
+                    <button class="window-btn minimize-btn" onclick="minimizeWindow('contactWindow')">_</button>
+                    <button class="window-btn maximize-btn" onclick="maximizeWindow('contactWindow')">□</button>
+                    <button class="window-btn close-btn" onclick="closeWindow('contactWindow')">×</button>
+                </div>
+            </div>
+            <div class="window-content">
+                <h3 style="color: #0066cc; margin-bottom: 15px;">Let's Connect!</h3>
+                <div style="line-height: 2.5;">
+                    <p><strong>Email:</strong> john.doe@email.com</p>
+                    <p><strong>GitHub:</strong> github.com/johndoe</p>
+                    <p><strong>LinkedIn:</strong> linkedin.com/in/johndoe</p>
+                    <p><strong>Portfolio:</strong> johndoe.dev</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Taskbar -->
+        <div class="taskbar">
+            <button class="start-btn">
+                <span style="font-size: 16px;">⊞</span>
+                <span>start</span>
+            </button>
+            <div class="taskbar-time" id="time"></div>
+        </div>
+    </div>
+
+    <script>
+        let draggedWindow = null;
+        let offsetX = 0;
+        let offsetY = 0;
+
+        // Boot sequence
+        setTimeout(() => {
+            document.getElementById('bootScreen').style.display = 'none';
+            document.getElementById('loginScreen').style.display = 'flex';
+        }, 3000);
+
+        function login() {
+            document.getElementById('loginScreen').style.display = 'none';
+            document.getElementById('desktop').style.display = 'block';
+            updateTime();
+            setInterval(updateTime, 1000);
+        }
+
+        function openResume() {
+            openWindow('resumeWindow');
+        }
+
+        function openAbout() {
+            openWindow('aboutWindow');
+        }
+
+        function openContact() {
+            openWindow('contactWindow');
+        }
+
+        function openWindow(windowId) {
+            const win = document.getElementById(windowId);
+            win.style.display = 'block';
+            bringToFront(win);
+        }
+
+        function closeWindow(windowId) {
+            document.getElementById(windowId).style.display = 'none';
+        }
+
+        function minimizeWindow(windowId) {
+            document.getElementById(windowId).style.display = 'none';
+        }
+
+        function maximizeWindow(windowId) {
+            const win = document.getElementById(windowId);
+            if (win.style.width === '100vw') {
+                win.style.width = '700px';
+                win.style.height = 'auto';
+                win.style.left = '150px';
+                win.style.top = '100px';
+            } else {
+                win.style.width = '100vw';
+                win.style.height = 'calc(100vh - 40px)';
+                win.style.left = '0';
+                win.style.top = '0';
+            }
+        }
+
+        function bringToFront(win) {
+            const allWindows = document.querySelectorAll('.window');
+            allWindows.forEach(w => w.style.zIndex = '1');
+            win.style.zIndex = '1000';
+        }
+
+        function updateTime() {
+            const now = new Date();
+            const timeStr = now.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' });
+            document.getElementById('time').textContent = timeStr;
+        }
+
+        // Drag functionality
+        document.addEventListener('mousedown', (e) => {
+            if (e.target.classList.contains('window-header') || e.target.closest('.window-header')) {
+                const header = e.target.classList.contains('window-header') ? e.target : e.target.closest('.window-header');
+                draggedWindow = header.parentElement;
+                bringToFront(draggedWindow);
+                
+                const rect = draggedWindow.getBoundingClientRect();
+                offsetX = e.clientX - rect.left;
+                offsetY = e.clientY - rect.top;
+                
+                e.preventDefault();
+            }
+        });
+
+        document.addEventListener('mousemove', (e) => {
+            if (draggedWindow) {
+                draggedWindow.style.left = (e.clientX - offsetX) + 'px';
+                draggedWindow.style.top = (e.clientY - offsetY) + 'px';
+            }
+        });
+
+        document.addEventListener('mouseup', () => {
+            draggedWindow = null;
+        });
+    </script>
+</body>
+</html>
